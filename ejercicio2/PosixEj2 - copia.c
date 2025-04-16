@@ -7,7 +7,7 @@ void *in(), *m1(), *f1(), *qg(), *td(), *m2(), *fn(), *mf(), *min(), *rr(), *pr(
     *sr(), *inu(), *cb(), *sn();
 
 // Declaración de semáforos
-sem_t sem_m1, sem_f1, sem_qg, sem_td, sem_m2, sem_fn, sem_mf, sem_min,
+sem_t sem_in, sem_m1, sem_f1, sem_qg, sem_td, sem_m2, sem_fn, sem_mf, sem_min,
     sem_rr, sem_pr, sem_sr, sem_inu, sem_cb, sem_sn;
 
 int main()
