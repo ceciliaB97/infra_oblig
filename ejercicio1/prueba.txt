@@ -1,1 +1,95 @@
-prueba
+Parte POSIX
+
+Ejercicio 1
+
+Se tiene dos array de tamaño 5 (array1 y array2), con valores del 1 al 5.
+Se desea crear 5 hilos, uno para cada posición del array.
+El primer hilo deberá sumar la primera posición de array1 y array2.
+El segundo hilo deberá sumar la segunda posición de array1 y array2.
+El tercer hilo deberá sumar la tercera posición de array1 y array2.
+Luego debo alcanzar al hilo principal que los ha creado y sumar los 3 resultados anteriores.
+Dicho valor debo pasarlo al cuarto hilo y debe ser multiplicado por lo que está en el array1 en la cuarta posición y lo que está en el array2 en la cuarta posición.
+Luego ejecutar el quinto hilo sumándole lo que se encuentra en la quinta posición en el array1 y el array2.
+Cada hilo debe de mostrar lo que se está realizando.
+
+Ejemplo de salida
+
+Hilo 1: Suma 1 + 1 = 2
+Hilo 2: Suma 2 + 2 = 4
+Hilo 3: Suma 3 + 3 = 6
+Hilo 4: Suma total = 12
+Hilo 4: Multiplicación 12 * 4 * 4 = 192
+Hilo 5: 192 + 5 + 5 = 202
+Resultado final: 202
+
+Resolver sin utilizar semáforos, utilizando join.
+
+Solución:
+
+#include <pthread.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+// Arreglos con números del 1 al 5
+int array1[5] = {1, 2, 3, 4, 5}; 
+int array2[5] = {1, 2, 3, 4, 5};
+
+int res[6]; // Para guardar resultados de cada operación
+
+void* suma(void* arg) {
+//Convierte el argumento de void* (puntero genérico) a int* y luego a int. 
+int i  = *(int*)arg;
+int suma = array1[i] + array2[i];
+printf("Hilo %d: Suma %d + %d = %d\n", i + 1, array1[i], array2[i], suma);
+res[i] = suma;
+pthread_exit(NULL);
+}
+
+void* operacion_hilo4 (void* arg) {
+res[3] = res[0] + res[1] + res[2];
+printf("Hilo 4: Suma total = %d\n", res);
+
+res[4] = res[3] * array1[3] * array2[3];
+printf("Hilo 4: Multiplicación %d * %d * %d = %d\n", res[3], array1[3], array2[3], res[4]);
+pthread_exit(NULL);
+}
+
+void* operacion_hilo5 (void* arg) {
+res[5] = res[4] + array1[4] + array2[4];
+printf("Hilo 5: %d + %d + %d = %d\n", res[4], array1[4], array2[4], res[5]);
+pthread_exit(NULL);
+}
+
+int main() {
+    //Declara los hilos 
+    pthread_t t1, t2, t3, t4, t5;
+
+    //Crea los atributos y los inicializa con valores por defecto.
+    pthread_attr_t attr;
+    pthread_attr_init(&attr);
+
+    int indices[3] = {0, 1, 2};
+
+    //Crea hilos 1 a 3. Se pasa como argumento el índice a sumar. 
+    pthread_create(&t1, &attr, suma, &indices[0]);
+    pthread_create(&t2, &attr, suma, &indices[1]);
+    pthread_create(&t3, &attr, suma, &indices[2]);
+
+    // Espera hilos 1 a 3
+    pthread_join(t1, NULL);
+    pthread_join(t2, NULL);
+    pthread_join(t3, NULL);
+
+    //Crea el hilo 4 y espera a que termine
+    pthread_create(&t4, &attr, operacion_hilo4, NULL);
+    pthread_join(t4, NULL);
+
+    // Crea el hilo 5 y espera a que termine
+    pthread_create(&t5, &attr, operacion_hilo5, NULL);
+    pthread_join(t5, NULL);
+
+    // Muestra el resultado final
+    printf("Resultado final: %d\n", res[5]);
+
+    return 0;
+}
