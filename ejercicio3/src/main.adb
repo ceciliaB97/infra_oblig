@@ -85,3 +85,39 @@ procedure Main is
          end loop;
       end Ingresar;
    end Persona;
+
+   task Despachador;
+
+   task body Despachador is
+      IdPersona : Integer;
+   begin
+      loop
+         ColaInstancia.desencolarCliente(IdPersona);
+         declare
+            Asignado : Boolean := False;
+         begin
+            -- Intentamos asignar a una caja (round-robin simple)
+            for I in Cajas'Range loop
+               select
+                  Cajas(I).AtenderCliente(IdPersona, I);
+                  Asignado := True;
+                  exit;
+               or
+                  delay 0.01; -- Espera mínima para que no quede colgado
+               end select;
+               exit when Asignado;
+            end loop;
+         end;
+      end loop;
+   end Despachador;
+
+begin
+   -- Ingresan personas
+   for I in Personas'Range loop
+      Personas(I).Ingresar(I);
+   end loop;
+
+   -- Dejar correr el sistema un rato
+   delay 30.0;
+   Put_Line("Fin de la simulación.");
+end Main;
