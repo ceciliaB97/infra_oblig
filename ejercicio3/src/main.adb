@@ -1,10 +1,27 @@
+with Ada.Text_IO;
+with Ada.Numerics.Discrete_Random;
+
+use Ada.Text_IO;
+
 procedure Main is
+   -- Definir tipos de rangos discreto
+   subtype RangoCola is Integer range 0 .. 5;
+   package RandomIntCola is new Ada.Numerics.Discrete_Random(RangoCola);
+   use RandomIntCola;
+
+   subtype RangoPersona is Integer range 0 .. 3;
+   package RandomIntPersona is new Ada.Numerics.Discrete_Random(RangoPersona);
+   use RandomIntPersona;
+
    LargoCajas : Integer := 4;
    LargoCola : Integer := 10;
 
+   GeneradorNums : Generator;
+   numRandom : RangoCola;
+
     -- Task de caja generica
    task type Caja is
-      entry AtenderCliente(IdPersona : Integer, IdCaja : Integer);
+      entry AtenderCliente(IdPersona : Integer; IdCaja : Integer);
    end Caja;
 
    task body Caja is
@@ -12,12 +29,17 @@ procedure Main is
    begin
       loop
          select
-            accept AtenderCliente(IdPersona : Integer, IdCaja : Integer) do
+            accept AtenderCliente(IdPersona : Integer; IdCaja : Integer) do
                if not Ocupada then
                   Ocupada := True;
                   Put_Line("Persona " & Integer'Image(IdPersona) & " ingres� a la caja " & Integer'Image(IdCaja));
-                  delay 2.0 + Float(IdPersona mod 4) --la funcion float devuelve entre 0..3 + 2 el maximo es 5
-                    Put_Line("Persona " & Integer'Image(IdPersona) & " saliendo de la caja " & Integer'Image(IdCaja));
+
+                  Reset(GeneradorNums);
+                  numRandom := Random(GeneradorNums);
+                  delay numRandom;
+
+                  --delay 2.0 + Float(IdPersona mod 4); --la funcion float devuelve entre 0..3 + 2 el maximo es 5
+                   Put_Line("Persona " & Integer'Image(IdPersona) & " saliendo de la caja " & Integer'Image(IdCaja));
                   Ocupada := False;
                end if;
             end AtenderCliente;
@@ -37,7 +59,7 @@ procedure Main is
 
    task body Cola is
       lugaresOcupados : Integer := 0;
-      clientesActuales : array(1...LargoCola) of Integer;
+      clientesActuales : array(1..LargoCola) of Integer;
    begin
       loop
          select
@@ -59,7 +81,7 @@ procedure Main is
                      clientesActuales(I) := clientesActuales(I + 1);
                   end loop;
                   lugaresOcupados := lugaresOcupados - 1;
-                  Put_Line("Usuario " & Integer'Image(Id) & " sale de la cola de espera.");
+                  Put_Line("Usuario " & Integer'Image(IdPersona) & " sale de la cola de espera.");
                end if;
             end desencolarCliente;
          end select;
@@ -80,19 +102,21 @@ procedure Main is
                encolarCliente(IdPersona);
                exit;
             or
-               delay Float(Id mod 4)
+               delay Float(IdPersona mod 4);
             end select;
          end loop;
       end Ingresar;
    end Persona;
 
-   task Despachador;
+   task type Despachador is
+
+   end Despachador;
 
    task body Despachador is
       IdPersona : Integer;
    begin
       loop
-         ColaInstancia.desencolarCliente(IdPersona);
+         Cola.desencolarCliente(IdPersona);
          declare
             Asignado : Boolean := False;
          begin
@@ -112,10 +136,34 @@ procedure Main is
    end Despachador;
 
 begin
+    Put("Ingrese la cantidad de personas a crear: ");
+   declare
+      cantPersonas : Integer;
+   begin
+      --Get(cantPersonas);
+      cantPersonas := Integer'Value(Get_Line);
+
+      for IdPersona in 1..cantPersonas loop
+         declare
+            Cliente : Integer;
+         begin
+            Persona.Ingresar(IdPersona);
+            --Persona'(Ingresar(IdPersona));
+            --Cola.desencolarCliente(Cliente);
+            --Cajas((Cliente mod LargoCajas) + 1).atenderCliente(Cliente); -- Diferencia cada caja usando el `entry`
+         end;
+         Reset(GeneradorNums);
+         numRandom := Random(GeneradorNums);
+         delay numRandom;
+         --delay Integer'Image(Random(GeneradorNums, 2..5));
+      end loop;
+   end;
+
+
    -- Ingresan personas
-   for I in Personas'Range loop
-      Personas(I).Ingresar(I);
-   end loop;
+   --for I in Personas'Range loop
+      --Personas(I).Ingresar(I);
+   --end loop;
 
    -- Dejar correr el sistema un rato
    delay 30.0;
