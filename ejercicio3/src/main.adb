@@ -77,7 +77,7 @@ procedure Main is
       accept Ingresar(IdPersona : Integer) do
          loop
             select
-               Cola.AgregarCliente(Id);
+               encolarCliente(IdPersona);
                exit;
             or
                delay Float(Id mod 4)
