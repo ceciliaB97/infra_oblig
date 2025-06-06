@@ -16,7 +16,7 @@ procedure Main is
                if not Ocupada then
                   Ocupada := True;
                   Put_Line("Persona " & Integer'Image(IdPersona) & " ingresó a la caja " & Integer'Image(IdCaja));
-                  delay 2.0 + Float(Id mod 4) --la funcion float devuelve entre 0..3 + 2 el maximo es 5
+                  delay 2.0 + Float(IdPersona mod 4) --la funcion float devuelve entre 0..3 + 2 el maximo es 5
                     Put_Line("Persona " & Integer'Image(IdPersona) & " saliendo de la caja " & Integer'Image(IdCaja));
                   Ocupada := False;
                end if;
