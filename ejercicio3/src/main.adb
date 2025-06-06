@@ -16,7 +16,7 @@ procedure Main is
                if not Ocupada then
                   Ocupada := True;
                   Put_Line("Persona " & Integer'Image(IdPersona) & " ingres� a la caja " & Integer'Image(IdCaja));
-                  delay 2.0 + Float(Id mod 4) --la funcion float devuelve entre 0..3 + 2 el maximo es 5
+                  delay 2.0 + Float(IdPersona mod 4) --la funcion float devuelve entre 0..3 + 2 el maximo es 5
                     Put_Line("Persona " & Integer'Image(IdPersona) & " saliendo de la caja " & Integer'Image(IdCaja));
                   Ocupada := False;
                end if;
@@ -26,6 +26,9 @@ procedure Main is
          end select;
       end loop;
    end Caja;
+
+   -- Crear las 4 cajas a partir de caja generica
+   Cajas : array(1..LargoCajas) of Caja;
 
    task Cola is
       entry encolarCliente(IdPersona : Integer);
@@ -48,6 +51,17 @@ procedure Main is
 
                end if;
             end encolarCliente;
+         or
+            accept desencolarCliente(IdPersona : out Integer) do
+               if lugaresOcupados > 0 then
+                  IdPersona := clientesActuales(1);
+                  for I in 1..LargoCola - 1 loop
+                     clientesActuales(I) := clientesActuales(I + 1);
+                  end loop;
+                  lugaresOcupados := lugaresOcupados - 1;
+                  Put_Line("Usuario " & Integer'Image(Id) & " sale de la cola de espera.");
+               end if;
+            end desencolarCliente;
          end select;
       end loop;
    end Cola;
