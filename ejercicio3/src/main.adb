@@ -52,16 +52,22 @@ procedure Main is
       end loop;
    end Cola;
 
-   task type Persona is
-      entry Ingresar(IdPersona : Integer);
+  task type Persona is
+      entry Ingresar(Id : Integer);
    end Persona;
 
    task body Persona is
       IdPersona : Integer;
+      Intento : Boolean := False;
    begin
       accept Ingresar(IdPersona : Integer) do
-         encolarCliente(IdPersona);
+         loop
+            select
+               Cola.AgregarCliente(Id);
+               exit;
+            or
+               delay Float(Id mod 4)
+            end select;
+         end loop;
       end Ingresar;
    end Persona;
-
-end Main;
