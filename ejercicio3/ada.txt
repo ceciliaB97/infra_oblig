@@ -92,17 +92,50 @@ begin
    begin
       Get(Num_Personas);
 
+      -- Inicializa generador aleatorio
+      Random.Reset(Gen);
+
+      -- Lanza personas como tasks
       for Id in 1..Num_Personas loop
          declare
-            Cliente : Integer;
+            P : Persona;
          begin
-            Persona'(Ingresar(Id));
-            Cola.Retirar_Cliente(Cliente);
-            Cajas((Cliente mod Max_Cajas) + 1).Atender_Cliente(Cliente); -- Diferencia cada caja usando el `entry`
+            P.Ingresar(Id);
          end;
-         delay 2.0 + Float(Id mod 3); -- Simulación de llegada aleatoria
+         delay 1.0; -- una persona por segundo
       end loop;
 
+      -- Espera indefinida para dejar que el sistema funcione
+      loop
+         delay 10.0;
+      end loop;
    end;
-
 end Self_Checkout;
+
+
+   -- Despachador que retira de la cola y asigna a cajas
+   task Despachador;
+   task body Despachador is
+      Cliente : Integer;
+   begin
+      loop
+         Cola.Retirar_Cliente(Cliente);
+
+         declare
+            Asignado : Boolean := False;
+         begin
+            while not Asignado loop
+               for I in 1..Max_Cajas loop
+                  select
+                     Cajas(I).Atender_Cliente(Cliente, I);
+                     Asignado := True;
+                     exit;
+                  or
+                     delay 0.1;
+                  end select;
+               end loop;
+               delay 0.1;
+            end loop;
+         end;
+      end loop;
+   end Despachador;
