@@ -27,6 +27,9 @@ procedure Main is
       end loop;
    end Caja;
 
+   -- Crear las 4 cajas a partir de caja generica
+   Cajas : array(1..LargoCajas) of Caja;
+
    task Cola is
       entry encolarCliente(IdPersona : Integer);
       entry desencolarCliente(IdPersona : out Integer);
