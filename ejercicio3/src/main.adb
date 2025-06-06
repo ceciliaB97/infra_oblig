@@ -51,6 +51,17 @@ procedure Main is
 
                end if;
             end encolarCliente;
+         or
+            accept desencolarCliente(IdPersona : out Integer) do
+               if lugaresOcupados > 0 then
+                  IdPersona := clientesActuales(1);
+                  for I in 1..LargoCola - 1 loop
+                     clientesActuales(I) := clientesActuales(I + 1);
+                  end loop;
+                  lugaresOcupados := lugaresOcupados - 1;
+                  Put_Line("Usuario " & Integer'Image(Id) & " sale de la cola de espera.");
+               end if;
+            end desencolarCliente;
          end select;
       end loop;
    end Cola;
