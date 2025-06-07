@@ -20,7 +20,7 @@ procedure Main is
             accept Atender_Cliente(Id : Integer; Num_Caja : Integer) do
                if not Ocupada then
                   Ocupada := True;
-                  Put_Line("Persona " & Integer'Image(Id) & " ingresÛ a la caja " & Integer'Image(Num_Caja));
+                  Put_Line("Persona " & Integer'Image(Id) & " ingres√≥ a la caja " & Integer'Image(Num_Caja));
                   delay 2.0 + Standard.Duration(Id mod 4); -- Simula tiempo aleatorio entre 2 y 5 segundos
                   Put_Line("Persona " & Integer'Image(Id) & " saliendo de la caja " & Integer'Image(Num_Caja));
                   Ocupada := False;
@@ -35,7 +35,7 @@ procedure Main is
    -- Instancias de las 4 cajas
    Cajas : array(1..Max_Cajas) of Caja;
 
-   -- Task para la cola de espera y generaciÛn de personas
+   -- Task para la cola de espera y generaci√≥n de personas
    task Cola is
       entry Agregar_Cliente(Id : Integer);
       entry Retirar_Cliente(Id : out Integer);
@@ -53,7 +53,7 @@ procedure Main is
                   Lista_Clientes(Num_Clientes) := Id;
                   Put_Line("Usuario " & Integer'Image(Id) & " entra a la cola de espera.");
                else
-                  Put_Line("Cola llena, no se permiten m·s usuarios.");
+                  Put_Line("Cola llena, no se permiten m√°s usuarios.");
                   delay Standard.Duration(Id mod 3); -- Espera aleatoria antes de intentar ingresar de nuevo
                end if;
             end Agregar_Cliente;
@@ -84,6 +84,7 @@ procedure Main is
       end Ingresar;
    end Persona;
 
+
 --begin Main
 begin
    Put("Ingrese la cantidad de personas a crear: ");
@@ -100,7 +101,7 @@ begin
             --Persona.Ingresar(Id);
             Cola.Agregar_Cliente(Id);
          end;
-         delay 2.0 + Standard.Duration(Id mod 3); -- SimulaciÛn de llegada aleatoria
+         delay 2.0 + Standard.Duration(Id mod 3); -- Simulaci√≥n de llegada aleatoria
       end loop;
 
       for Id in 1..Num_Personas loop
@@ -112,9 +113,8 @@ begin
             Num_Caja := (Cliente mod Max_Cajas) + 1;
             Cajas(Num_Caja).Atender_Cliente(Cliente, Num_Caja);
          end;
-         delay 2.0 + Standard.Duration(Id mod 3); -- SimulaciÛn de llegada aleatoria
+         delay 2.0 + Standard.Duration(Id mod 3); -- Simulaci√≥n de llegada aleatoria
       end loop;
-
    end;
 
 end Main;
