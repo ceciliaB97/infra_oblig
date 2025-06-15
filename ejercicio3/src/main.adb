@@ -10,34 +10,35 @@ procedure Main is
 
    -- Task type para definir el comportamiento de cada caja
    task type Caja is
-      entry Atender_Cliente(Id : Integer; Num_Caja : Integer);
-      entry Despachar_Cliente(Id : out Integer; Num_Caja : out Integer);
+      entry Atender_Cliente(Id : Persona_ID; Num_Caja : Integer);
+      entry Despachar_Cliente(Id : out Persona_ID; Num_Caja : out Integer);
    end Caja;
 
    task body Caja is
       Ocupada : Boolean := False;
-      Id_Cliente, Num_Caja_Actual : Integer := 0;
+      Id_Cliente : Persona_ID := 0;
+      Num_Caja_Actual : Integer := 0;
    begin
       loop
          select when not Ocupada =>
-               accept Atender_Cliente (Id : Integer; Num_Caja : Integer) do
+               accept Atender_Cliente (Id : Persona_ID; Num_Caja : Integer) do
                   Ocupada := True;
                   Id_Cliente := Id;
                   Num_Caja_Actual := Num_Caja;
-                  Put_Line("Persona " & Integer'Image(Id) & " ingresó a la caja " & Integer'Image(Num_Caja));
+                  Put_Line("Persona " & Persona_ID'Image(Id) & " ingresó a la caja " & Integer'Image(Num_Caja));
                   delay 2.0 + Standard.Duration(Id mod 4); -- Simula tiempo aleatorio entre 2 y 5 segundos
                   --Put_Line("Persona " & Integer'Image(Id) & " saliendo de la caja " & Integer'Image(Num_Caja));
                   --Ocupada := False;
             end Atender_Cliente;
          or
               when Ocupada =>
-              accept Despachar_Cliente(Id : out Integer; Num_Caja : out Integer) do
+              accept Despachar_Cliente(Id : out Persona_ID; Num_Caja : out Integer) do
                   --Ocupada := True;
                   --Put_Line("Persona " & Integer'Image(Id) & " ingresó a la caja " & Integer'Image(Num_Caja));
                   --delay 2.0 + Standard.Duration(Id mod 4); -- Simula tiempo aleatorio entre 2 y 5 segundos
                   Id := Id_Cliente;
                   Num_Caja := Num_Caja_Actual;
-                  Put_Line("Persona " & Integer'Image(Id) & " saliendo de la caja " & Integer'Image(Num_Caja));
+                  Put_Line("Persona " & Persona_ID'Image(Id) & " saliendo de la caja " & Integer'Image(Num_Caja));
                   --Ocupada := False;
             end Despachar_Cliente;
          or
