@@ -1,3 +1,7 @@
+# ada
+*.xml
+*.cgpr
+
 # Prerequisites
 *.d
 
