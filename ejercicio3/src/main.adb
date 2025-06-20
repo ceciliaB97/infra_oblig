@@ -8,36 +8,55 @@ procedure Main is
    Max_Cola  : constant Integer := 10;
    type Persona_ID is new Integer;
 
+
+   -- Task para la cola de espera y generaciÃ³n de personas
+   task Cola is
+      entry Agregar_Cliente(Id : Persona_ID; Ya_Entro : out Boolean);
+      entry Retirar_Cliente(Id : out Persona_ID);
+   end Cola;
+
    -- Task type para definir el comportamiento de cada caja
    task type Caja is
       entry Atender_Cliente(Id : Persona_ID; Num_Caja : Integer);
       entry Despachar_Cliente(Id : out Persona_ID; Num_Caja : out Integer);
    end Caja;
 
+   -- Task para simular la llegada de personas
+   task type Persona(Id: Persona_ID) is
+      entry Ingresar(Id : Persona_ID);
+   end Persona;
+
    task body Caja is
       Ocupada : Boolean := False;
-      Id_Cliente, Num_Caja_Actual : Integer := 0;
+      Id_Cliente : Persona_ID := 0;
+      Num_Caja_Actual : Integer := 0;
+
    begin
       loop
          select when not Ocupada =>
                accept Atender_Cliente (Id : Persona_ID; Num_Caja : Integer) do
-                  Ocupada := True;
+                  Put_Line("Usuario " & Persona_ID'Image(Id) & " sale de la cola de espera.");
                   Id_Cliente := Id;
+                  Cola.Retirar_Cliente(Id_Cliente);
+                  Ocupada := True;
                   Num_Caja_Actual := Num_Caja;
-                  Put_Line("Persona " & Integer'Image(Id) & " ingresó a la caja " & Integer'Image(Num_Caja));
+                  Put_Line("Persona " & Persona_ID'Image(Id) & " ingresÃ³ a la caja " & Integer'Image(Num_Caja));
+
                   delay 2.0 + Standard.Duration(Id mod 4); -- Simula tiempo aleatorio entre 2 y 5 segundos
                   --Put_Line("Persona " & Integer'Image(Id) & " saliendo de la caja " & Integer'Image(Num_Caja));
                   --Ocupada := False;
             end Atender_Cliente;
          or
               when Ocupada =>
-              accept Despachar_Cliente(Id : out Integer; Num_Caja : out Integer) do
+              accept Despachar_Cliente(Id : out Persona_ID; Num_Caja : out Integer) do
+
                   --Ocupada := True;
-                  --Put_Line("Persona " & Integer'Image(Id) & " ingresó a la caja " & Integer'Image(Num_Caja));
+                  --Put_Line("Persona " & Integer'Image(Id) & " ingresÃ³ a la caja " & Integer'Image(Num_Caja));
                   --delay 2.0 + Standard.Duration(Id mod 4); -- Simula tiempo aleatorio entre 2 y 5 segundos
                   Id := Id_Cliente;
                   Num_Caja := Num_Caja_Actual;
-                  Put_Line("Persona " & Integer'Image(Id) & " saliendo de la caja " & Integer'Image(Num_Caja));
+                  Put_Line("Persona " & Persona_ID'Image(Id) & " saliendo de la caja " & Integer'Image(Num_Caja));
+
                   --Ocupada := False;
             end Despachar_Cliente;
          or
@@ -49,34 +68,40 @@ procedure Main is
    -- Instancias de las 4 cajas
    Cajas : array(1..Max_Cajas) of Caja;
 
-   -- Task para la cola de espera y generación de personas
-   task Cola is
-      entry Agregar_Cliente(Id : Persona_ID; Ya_Entro : out Boolean);
-      entry Retirar_Cliente(Id : out Persona_ID);
-   end Cola;
 
    task body Cola is
-      Tamanio, Frente, Fondo : Integer := 0;
+      Tamanio, Frente, FrenteCajas, Fondo : Integer := 0;
       Lista_Clientes : array(1..Max_Cola) of Persona_ID;
    begin
       loop
-         select when Tamanio < Max_Cola =>
-               accept Agregar_Cliente(Id : Persona_ID; Ya_Entro : out Boolean) do
+         if Tamanio < Max_Cola then
+         --select when Tamanio < Max_Cola =>
+           accept Agregar_Cliente(Id : Persona_ID; Ya_Entro : out Boolean) do
                   Fondo := (Fondo mod Max_Cola) + 1;
                   Lista_Clientes(Fondo) := Id;
                   Tamanio := Tamanio + 1;
                   Ya_Entro := True;
                   Put_Line("Usuario " & Persona_ID'Image(Id) & " entra a la cola de espera.");
+                  --if Tamanio = Max_Cola then
+                     --FrenteCajas := (FrenteCajas mod Max_Cajas);
+                     --Cajas(1).Atender_Cliente(Id, 1);
+                  --end if;
             end Agregar_Cliente;
-         or
-            when Tamanio > 0 =>
-               accept Retirar_Cliente(Id : out Persona_ID) do
-                  Frente := (Frente mod Max_Cola) + 1;
+         else
+        -- or
+        --when Tamanio > 0 or Tamanio = Max_Cola =>
+        --or
+            accept Retirar_Cliente(Id : out Persona_ID) do
+                  Put_Line("accept retirar cliente");
                   Id := Lista_Clientes(Frente);
+                  FrenteCajas := (FrenteCajas mod Max_Cajas);
+                  Cajas(FrenteCajas).Atender_Cliente(Id, FrenteCajas);
+                  Frente := (Frente mod Max_Cola) + 1;
                   Tamanio := Tamanio - 1;
-                  Put_Line("Usuario " & Persona_ID'Image(Id) & " sale de la cola de espera.");
+
             end Retirar_Cliente;
-         end select;
+            --end select;
+            end if;
       end loop;
    end Cola;
 
@@ -90,8 +115,10 @@ procedure Main is
    begin
          accept Ingresar(Id : Persona_ID) do
             loop
-               Cola.Agregar_Cliente(Id, Ya_Entro);
-               delay 2.0 + Standard.Duration(Id mod 3); -- Simulación de llegada aleatoria
+            Cola.Agregar_Cliente(Id, Ya_Entro);
+            exit when Ya_Entro;
+
+               delay 2.0 + Standard.Duration(Id mod 3); -- SimulaciÃ³n de llegada aleatoria
             end loop;
       end Ingresar;
    end Persona;
@@ -108,36 +135,9 @@ begin
          declare
             P : Persona(Persona_ID(I));
          begin
+            P.Ingresar(Persona_ID(I));
             delay 1.0;
          end;
       end loop;
-
-      --Put_Line("Cola de espera llena, comenzando asignación a cajas...");
-
-      -- Asignación a cajas en paralelo
-      --for I in 1..Num_Personas loop
-         --declare
-            --Cliente : Integer;
-         --begin
-           -- Cola.Retirar_Cliente(Cliente);
-           -- Cajas((Cliente mod Max_Cajas) + 1).Atender_Cliente(Cliente, (Cliente mod Max_Cajas) + 1);
-        -- end;
-      --end loop;
-
-      -- Despacho distribuido de clientes, asegurando que otros clientes salgan primero
-     -- loop
-       --  delay 2.0;
-       --  for I in 1..Max_Cola loop
-        --    declare
-        --       Cliente : Integer;
-         --      Num_Caja : Integer;
-         --   begin
-          --     delay 1.5; -- Evita que el cliente salga enseguida
-           --    Num_Caja := (I mod Max_Cajas) + 1;
-            --   Cajas((I mod Max_Cajas) + 1).Despachar_Cliente(Cliente, Num_Caja);
-           -- end;
-       --  end loop;
-    --  end loop;
-
    end;
 end Main;
