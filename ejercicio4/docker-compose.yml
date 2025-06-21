@@ -1,0 +1,57 @@
+services:
+  maquina1:
+    build: ./maquina1
+    container_name: maquina1
+    volumes:
+      - maquina1_data:/home/users/documentos
+    networks:
+      - red_infra
+
+  maquina2:
+    build: ./maquina2
+    container_name: maquina2
+    volumes:
+      - maquina2_data:/home/users/documentos
+    networks:
+      - red_infra
+
+  maquina3:
+    build: ./maquina3
+    container_name: maquina3
+    volumes:
+      - maquina3_data:/home/users/documentos
+    networks:
+      - red_infra
+
+  backup:
+    build: ./backup
+    container_name: backup
+    volumes:
+      - backup_data:/home
+    depends_on:
+      - maquina1
+      - maquina2
+      - maquina3
+    networks:
+      - red_infra
+
+  explorador:
+    build: ./explorador
+    container_name: explorador
+    volumes:
+      - backup_data:/mnt/backups
+    ports:
+      - "8080:8080"
+    depends_on:
+      - backup
+    networks:
+      - red_infra
+
+volumes:
+  maquina1_data:
+  maquina2_data:
+  maquina3_data:
+  backup_data:
+
+networks:
+  red_infra:
