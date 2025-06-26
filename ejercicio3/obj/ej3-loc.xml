@@ -1,11 +1,40 @@
 <?xml version="1.0"?>
 <Locations >
-  <Project >
+  <Project>
+    <vfs_file>C:\Users\meppi\Documents\ObligatorioInfra25\infra_oblig\ejercicio3\ej3.gpr</vfs_file>
     <file_marker column=" 1" line=" 1" >
       <vfs_project>C:\Users\meppi\Documents\ObligatorioInfra25\infra_oblig\ejercicio3\ej3.gpr</vfs_project>
       <vfs_file>C:\Users\meppi\Documents\ObligatorioInfra25\infra_oblig\ejercicio3\src\main.adb</vfs_file>
     </file_marker>
-    <file_marker current="true" column=" 21" line=" 80" >
+    <file_marker column=" 1" line=" 1" >
+      <vfs_project>C:\Users\meppi\Documents\ObligatorioInfra25\infra_oblig\ejercicio3\ej3.gpr</vfs_project>
+      <vfs_file>C:\Users\meppi\Documents\ObligatorioInfra25\infra_oblig\ejercicio3\src\main.adb</vfs_file>
+    </file_marker>
+    <file_marker column=" 7" line=" 2" >
+      <vfs_project>C:\Users\meppi\Documents\ObligatorioInfra25\infra_oblig\ejercicio3\ej3.gpr</vfs_project>
+      <vfs_file>C:\Users\meppi\Documents\ObligatorioInfra25\infra_oblig\ejercicio3\src\main.adb</vfs_file>
+    </file_marker>
+    <file_marker column=" 1" line=" 1" >
+      <vfs_project>C:\Users\meppi\Documents\ObligatorioInfra25\infra_oblig\ejercicio3\ej3.gpr</vfs_project>
+      <vfs_file>C:\Users\meppi\Documents\ObligatorioInfra25\infra_oblig\ejercicio3\src\main.adb</vfs_file>
+    </file_marker>
+    <file_marker column=" 1" line=" 1" >
+      <vfs_project>C:\Users\meppi\Documents\ObligatorioInfra25\infra_oblig\ejercicio3\ej3.gpr</vfs_project>
+      <vfs_file>C:\Users\meppi\Documents\ObligatorioInfra25\infra_oblig\ejercicio3\src\main.adb</vfs_file>
+    </file_marker>
+    <file_marker column=" 1" line=" 1" >
+      <vfs_project>C:\Users\meppi\Documents\ObligatorioInfra25\infra_oblig\ejercicio3\ej3.gpr</vfs_project>
+      <vfs_file>C:\Users\meppi\Documents\ObligatorioInfra25\infra_oblig\ejercicio3\src\main.adb</vfs_file>
+    </file_marker>
+    <file_marker column=" 1" line=" 1" >
+      <vfs_project>C:\Users\meppi\Documents\ObligatorioInfra25\infra_oblig\ejercicio3\ej3.gpr</vfs_project>
+      <vfs_file>C:\Users\meppi\Documents\ObligatorioInfra25\infra_oblig\ejercicio3\src\main.adb</vfs_file>
+    </file_marker>
+    <file_marker column=" 21" line=" 12" >
+      <vfs_project>C:\Users\meppi\Documents\ObligatorioInfra25\infra_oblig\ejercicio3\ej3.gpr</vfs_project>
+      <vfs_file>C:\Users\meppi\Documents\ObligatorioInfra25\infra_oblig\ejercicio3\src\main.adb</vfs_file>
+    </file_marker>
+    <file_marker current="true" column=" 4" line=" 20" >
       <vfs_project>C:\Users\meppi\Documents\ObligatorioInfra25\infra_oblig\ejercicio3\ej3.gpr</vfs_project>
       <vfs_file>C:\Users\meppi\Documents\ObligatorioInfra25\infra_oblig\ejercicio3\src\main.adb</vfs_file>
     </file_marker>

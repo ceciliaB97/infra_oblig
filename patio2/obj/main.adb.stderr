@@ -1,0 +1,2 @@
+main.adb:44:01: error: missing "end;" for "begin" at line 36
+main.adb:44:01: error: missing "end loop;" for "loop" at line 35
