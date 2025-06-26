@@ -67,7 +67,6 @@ procedure Main is
       Lista_Clientes : array(1..Max_Cola) of Persona_ID;
    begin
       loop
-         --select when Tamanio < Max_Cola =>
          accept Agregar_Cliente(Id : Persona_ID; Ya_Entro : out Boolean; Id_Salida : out Persona_ID) do
             --Put_Line("Cant_Total_Personas_Ingresadas: " & Integer'Image(Cant_Total_Personas_Ingresadas));
             if Tamanio < Max_Cola and (Cant_Total_Personas_Ingresadas /= Cant_Total_Personas_Programa) then
