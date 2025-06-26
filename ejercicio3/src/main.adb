@@ -8,6 +8,9 @@ procedure Main is
    Max_Cola  : constant Integer := 10;
    type Persona_ID is new Integer;
 
+   Aun_Hay_Personas_A_Procesar : Boolean := True;
+   Entro_Ultima_Persona_En_Cola : Boolean := True;
+   Cant_Cajas_En_Uso : Integer := 0;
    Cant_Total_Personas_Ingresadas : Integer := 0;
    Cant_Total_Personas_Programa : Integer := 0;
 
@@ -45,6 +48,7 @@ procedure Main is
                   Ocupada := True;
                   Num_Caja_Actual := Num_Caja;
                   Put_Line("Persona " & Persona_ID'Image(Id) & " ingresó a la caja " & Integer'Image(Num_Caja));
+                  Cant_Cajas_En_Uso := Cant_Cajas_En_Uso + 1;
                   delay 2.0 + Standard.Duration(Id mod 4); -- Simula tiempo aleatorio entre 2 y 5 segundos
                  end if;
             else
@@ -52,7 +56,13 @@ procedure Main is
                   Num_Caja_Salida := Num_Caja_Actual;
                   Put_Line("Persona " & Persona_ID'Image(Id_Salida) & " saliendo de la caja " & Integer'Image(Num_Caja_Salida));
                   Ocupada := False;
+                  Cant_Cajas_En_Uso := Cant_Cajas_En_Uso - 1;
+                  If Integer(Id_Salida) = Cant_Total_Personas_Programa then
+                      Aun_Hay_Personas_A_Procesar := True;
+                  end if;
             end if;
+            Put_Line("****Cant_Cajas_En_Uso: " & Integer'Image(Cant_Cajas_En_Uso));
+
             end Atender_Cliente;
 
       end loop;
@@ -69,13 +79,19 @@ procedure Main is
       loop
          accept Agregar_Cliente(Id : Persona_ID; Ya_Entro : out Boolean; Id_Salida : out Persona_ID) do
             --Put_Line("Cant_Total_Personas_Ingresadas: " & Integer'Image(Cant_Total_Personas_Ingresadas));
-            if Tamanio < Max_Cola and (Cant_Total_Personas_Ingresadas /= Cant_Total_Personas_Programa) then
+            --(Cant_Total_Personas_Ingresadas /= Cant_Total_Personas_Programa)
+            Put_Line("****Cant_Total_Personas_Ingresadas: " & Integer'Image(Cant_Total_Personas_Ingresadas)
+                     & ", Aun_Hay_Personas_A_Ingresar: " & Boolean'Image(Aun_Hay_Personas_A_Procesar));
+            if Tamanio < Max_Cola and not Entro_Ultima_Persona_En_Cola then
                   Fondo := (Fondo mod Max_Cola) + 1;
                   Lista_Clientes(Fondo) := Id;
                   Fondo := Fondo;
                   Tamanio := Tamanio + 1;
                   Ya_Entro := True;
-                  Put_Line("Usuario " & Persona_ID'Image(Id) & " entra a la cola de espera.");
+               Put_Line("Usuario " & Persona_ID'Image(Id) & " entra a la cola de espera.");
+               if Integer(Id) <= Cant_Total_Personas_Programa then
+                  Entro_Ultima_Persona_En_Cola := True;
+                  end if;
             else
                if Tamanio = Max_Cola then
                   Put_Line("Cola de espera llena, no se permiten más personas por ahora. ");
@@ -113,13 +129,24 @@ begin
    Cant_Total_Personas_Programa := Num_Personas;
    declare
    begin
+      Put_Line("****cant total de personas a ingresar es: " & Integer'Image(Cant_Total_Personas_Programa));
       -- Llenar la cola primero antes de empezar el proceso
-      for I in 1..Num_Personas loop
+      --for I in 1..Num_Personas loop
+      loop
          declare
-            P : Persona(Persona_ID(I));
+            --P : Persona(Persona_ID(I));
+            P : Persona(Persona_ID(Cant_Total_Personas_Ingresadas));
          begin
             Cant_Total_Personas_Ingresadas := Cant_Total_Personas_Ingresadas + 1;
-            P.Ingresar(Persona_ID(I));
+            --If Cant_Total_Personas_Ingresadas = Cant_Total_Personas_Programa then
+               --Aun_Hay_Personas_A_Ingresar := False;
+            --end if;
+            if not Aun_Hay_Personas_A_Procesar and (Cant_Cajas_En_Uso = 0) and Entro_Ultima_Persona_En_Cola then
+               Put_Line("****Ya no hay más personas para procesar, se termió el programa");
+               exit;
+            end if;
+            --P.Ingresar(Persona_ID(I));
+            P.Ingresar(Persona_ID(Cant_Total_Personas_Ingresadas));
             delay 1.0;
          end;
       end loop;
