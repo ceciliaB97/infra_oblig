@@ -1,1 +1,2 @@
-main.adb:47:10: error: "or" not allowed here
+main.adb:57:15: warning: potentially unsynchronized barrier [enabled by default]
+main.adb:57:15: warning: "T150b" should be private component of type [enabled by default]
