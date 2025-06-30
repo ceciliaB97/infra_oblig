@@ -1,0 +1,2 @@
+main.adb:56:15: warning: potentially unsynchronized barrier [enabled by default]
+main.adb:56:15: warning: "T150b" should be private component of type [enabled by default]

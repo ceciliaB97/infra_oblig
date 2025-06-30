@@ -6,29 +6,40 @@ A -march=x86-64
 P SS ZX
 
 RN
+RV SIMPLE_BARRIERS
+RV PURE_BARRIERS
+RV NO_ALLOCATORS
 RV NO_DELAY
 RV NO_EXCEPTION_HANDLERS
+RV NO_EXCEPTION_PROPAGATION
 RV NO_EXCEPTIONS
 RV NO_FIXED_POINT
 RV NO_IO
+RV NO_IMPLICIT_CONDITIONALS
+RV NO_LOCAL_ALLOCATORS
+RV NO_LOCAL_PROTECTED_OBJECTS
+RV NO_NESTED_FINALIZATION
+RV NO_PROTECTED_TYPES
 RV NO_RELATIVE_DELAY
 RV NO_SECONDARY_STACK
-RV NO_SELECT_STATEMENTS
+RV NO_STANDARD_ALLOCATORS_AFTER_ELABORATION
 RV NO_STANDARD_STORAGE_POOLS
+RV NO_TASK_ALLOCATORS
 RV NO_TASK_HIERARCHY
 RV NO_TASKING
-RV NO_TERMINATE_ALTERNATIVES
 RV NO_DEFAULT_INITIALIZATION
 RV NO_DYNAMIC_SIZED_OBJECTS
 RV NO_IMPLEMENTATION_PRAGMAS
 RV NO_IMPLICIT_LOOPS
-RV MAX_SELECT_ALTERNATIVES=3
-RV MAX_TASK_ENTRIES=2
+RV MAX_PROTECTED_ENTRIES=2
 RV MAX_TASKS=1+
+RV MAX_ENTRY_QUEUE_LENGTH=1+
 
-U main%b		main.adb		7efa2580 NE OO SU
+U main%b		main.adb		56f88f58 NE OO SU
 W ada%s			ada.ads			ada.ali
 Z ada.calendar.delays%s	a-caldel.adb		a-caldel.ali
+Z ada.exceptions%s	a-except.adb		a-except.ali
+W ada.integer_text_io%s	a-inteio.ads		a-inteio.ali
 Z ada.real_time%s	a-reatim.adb		a-reatim.ali
 Z ada.strings.text_buffers%s  a-sttebu.adb	a-sttebu.ali
 W ada.text_io%s		a-textio.adb		a-textio.ali
@@ -41,15 +52,17 @@ Z system.secondary_stack%s  s-secsta.adb	s-secsta.ali
 Z system.soft_links%s	s-soflin.adb		s-soflin.ali
 Z system.task_info%s	s-tasinf.adb		s-tasinf.ali
 Z system.tasking%s	s-taskin.adb		s-taskin.ali
-Z system.tasking.rendezvous%s  s-tasren.adb	s-tasren.ali
+Z system.tasking.protected_objects%s  s-taprob.adb  s-taprob.ali
+Z system.tasking.protected_objects.entries%s  s-tpoben.adb  s-tpoben.ali
+Z system.tasking.protected_objects.operations%s  s-tpobop.adb  s-tpobop.ali
 Z system.tasking.stages%s  s-tassta.adb		s-tassta.ali
-Z system.val_int%s	s-valint.ads		s-valint.ali
 
 D ada.ads		20210520051132 76789da1 ada%s
 D a-calend.ads		20210520051128 474d9720 ada.calendar%s
 D a-caldel.ads		20210520051128 9f20b83d ada.calendar.delays%s
 D a-except.ads		20210520051128 946f3014 ada.exceptions%s
 D a-finali.ads		20210520051128 bf4f806b ada.finalization%s
+D a-inteio.ads		20210520051128 f64b89a4 ada.integer_text_io%s
 D a-ioexce.ads		20210520051128 e4a01f64 ada.io_exceptions%s
 D a-reatim.ads		20210520051128 0240fc73 ada.real_time%s
 D a-stream.ads		20210520051130 119b8fb3 ada.streams%s
@@ -58,12 +71,13 @@ D a-sttebu.ads		20210520051130 18209c64 ada.strings.text_buffers%s
 D a-stuten.ads		20210520051130 808c40ad ada.strings.utf_encoding%s
 D a-tags.ads		20210520051130 9eaa38c6 ada.tags%s
 D a-textio.ads		20210520051130 aef4d56d ada.text_io%s
+D a-tiinio.ads		20210520051130 390edddb ada.text_io.integer_io%s
 D a-unccon.ads		20210520051130 0e9b276f ada.unchecked_conversion%s
 D interfac.ads		20210520051132 edec285f interfaces%s
 D i-c.ads		20210520051132 d9beded9 interfaces.c%s
 D i-cstrin.ads		20210520051132 341d0ddf interfaces.c.strings%s
 D i-cstrea.ads		20210520051132 e53d8b8e interfaces.c_streams%s
-D main.adb		20250615230942 d00ef0ed main%b
+D main.adb		20250630183642 0e47d391 main%b
 D system.ads		20210520051136 2ffa5114 system%s
 D s-atacco.ads		20210520051132 4c36d12f system.address_to_access_conversions%s
 D s-conca3.ads		20210520051132 0b705ca5 system.concat_3%s
@@ -91,70 +105,60 @@ D s-taprop.ads		20210520051128 6eefbe12 system.task_primitives.operations%s
 D s-taskin.ads		20210520051128 88fba9ad system.tasking%s
 D s-taprob.ads		20210520051128 acd6094d system.tasking.protected_objects%s
 D s-tpoben.ads		20210520051128 60ad3dae system.tasking.protected_objects.entries%s
-D s-tasren.ads		20210520051128 a67a9949 system.tasking.rendezvous%s
+D s-tpobop.ads		20210520051128 5f548bb3 system.tasking.protected_objects.operations%s
 D s-tassta.ads		20210520051128 cca55c94 system.tasking.stages%s
 D s-traent.ads		20210520051134 26a8d361 system.traceback_entries%s
 D s-unstyp.ads		20210520051134 2b077493 system.unsigned_types%s
-D s-valint.ads		20210520051134 e7fcadb7 system.val_int%s
-D s-valuns.ads		20210520051134 dac7b45d system.val_uns%s
-D s-valuei.ads		20210520051134 978dd0a6 system.value_i%s
-D s-valueu.ads		20210520051134 7b8fccf5 system.value_u%s
 D s-wchcon.ads		20210520051136 1b7d22d2 system.wch_con%s
 D s-win32.ads		20210520051136 15ac53fb system.win32%s
 D unchconv.ads		20210520051136 ca2f9e18 unchecked_conversion%s
 G a e
 G c Z b b [main standard 4 11 none]
 X 1 ada.ads
-16K9*Ada 20e8 19|1r6 2r5
-X 13 a-textio.ads
-58K13*Text_IO 725e16 19|1w10 2r9
-463U14*Put 19|102s4
-493V13*Get_Line{string} 19|103s34
-506U14*Put_Line 19|27s19 40s19 69s19 77s19
-X 19 main.adb
-4U11*Main 4b11 143l5 143t9
-7i4 Max_Cajas{integer} 50r21
-8i4 Max_Cola{integer} 60r33 63r32 65r39 74r41
-9I9 Persona_ID<integer> 54r34 55r38 60r46 64r44 69r41 73r48 77r41 84r26 85r27
-. 91r31 109r25
-12T14 Caja 15l8 15e12 17b14 47l8 47t12 50r35
-13Y13 Atender_Cliente 13>29 13>43 23b23 31l17 31t32
-13i29 Id{integer} 25r33 27r55 28r49
-13i43 Num_Caja{integer} 26r38 27r99
-14Y13 Despachar_Cliente 14<31 14<49 34b22 42l17 42t34
-14i31 Id{integer} 38m19 38r19 40r55
-14i49 Num_Caja{integer} 39m19 39r19 40r101
-18b7 Ocupada{boolean} 22r26 24m19 33r20
-19i7 Id_Cliente{integer} 25m19 38r25
-19i19 Num_Caja_Actual{integer} 26m19 39r31
-23i40 Id{integer}
-23i54 Num_Caja{integer}
-34i40 Id{integer}
-34i58 Num_Caja{integer}
-50a4 Cajas(12T14)
-53t9 Cola 58b14 81l8 81t12 93r16
-54Y13 Agregar_Cliente 54>29 54<46 64b23 70l17 70t32 93s21
-54i29 Id{9I9} 66r44 69r58
-54b46 Ya_Entro{boolean} 68m19 68r19
-55Y13 Retirar_Cliente 55<29 73b23 78l17 78t32
-55i29 Id{9I9} 75m19 75r19 77r58
-59i7 Tamanio{integer} 63r22 67m19 67r30 72r18 76m19 76r30
-59i16 Frente{integer} 74m19 74r30 75r40
-59i24 Fondo{integer} 65m19 65r29 66r34
-60a7 Lista_Clientes(9I9) 66m19 75r25
-64i39 Id{9I9}
-64b56 Ya_Entro{boolean}
-73i39 Id{9I9}
-84T14 Persona 84d22 86l8 86e15 88b14 97l8 97t15 109r17
-84i22 Id{9I9}
-85Y13 Ingresar 85>22 91b17 96l11 96t19
-85i22 Id{9I9} 93r37 94r46
-89b7 Ya_Entro{boolean} 93m41
-91i26 Id{9I9}
-100i7 Num_Personas{integer} 103m4 107r19
-107i11 I{integer} 109r36
-109t13 P{84T14}
-X 37 s-stausa.ads
+16K9*Ada 20e8 21|1r6 1r23 2r6 2r31
+X 6 a-inteio.ads
+18K13*Integer_Text_IO[15|46] 21|2w10 2r35
+X 14 a-textio.ads
+58K13*Text_IO 725e16 21|1w10 1r27
+262U14*New_Line 21|120s4
+463U14*Put 21|118s4
+506U14*Put_Line 21|27s13 30s10 36s10 89s13 103s7 109s7 134s4
+X 15 a-tiinio.ads
+59U14*Get 21|119s4[6|18]
+X 21 main.adb
+4U11*Main 4b11 135l5 135t9
+6i4 Max_Cola{integer} 24r52 85r28
+7i4 Max_Cajas{integer} 10r37
+9I9 Persona_ID<integer> 16r25 17r24 24r25 33r24 77r27 127r37
+10A9 Estado_Cajas(boolean)<integer> 51r18
+12i4 Turno_Actual{integer} 97r34 105m7 105r23
+15w14 Cola 23b19 43l8 43t12 85r13 86r13 102r7
+16Y13 Entrar 16>20 24b13 31l11 31t17 86s18
+16i20 Id{9I9} 30r53
+17Y13 Salir 17>19 33b13 37l11 37t16 102s12
+17i19 Id{9I9} 36r53
+18V16 Cuantos{integer} 39b16 42l11 42t18 85s18
+20i7 En_Cola{integer} 24r42 26r13 27r52 29r10 29r21 33r41 35r10 35r21 41r17
+24i20 Id{9I9}
+33i19 Id{9I9}
+47w14 Cajas 54b19 73l8 73t13 101r7 110r7
+48Y13 Entrar 48<20 55b13 65l11 65t17 101s13
+48i20 Numero_Caja{integer} 61m16
+49Y13 Salir 49>19 67b13 72l11 72t16 110s13
+49i19 Numero_Caja{integer} 69r22 70r22
+51a7 Ocupadas{10A9} 56r29 56r51 58r19 59r20 60r16 69r13 70r13
+55i20 Numero_Caja{integer}
+56i24 I{integer} 56r60
+58i14 I{integer} 59r29 60r25 61r31
+67i19 Numero_Caja{integer}
+77T14 Persona 77d22 79b14 112l8 112t15 123r34 127r29
+77i22 Id{9I9} 82r22 86r25 90r34 94r28 97r28 102r18 103r50 107r28 109r50
+80i7 Caja_Num{integer} 101m20 103r95 109r97 110r19
+116i4 Num_Personas{integer} 119m8 124r29 126r21
+123P12 Persona_Ptr(77T14) 124r46
+124a7 Personas(123P12) 127m10
+126i11 I{integer} 127r19 127r48
+X 39 s-stausa.ads
 208U14*Initialize 209i<c,__gnat_stack_usage_initialize>22
 273U14*Output_Results 277i<c,__gnat_stack_usage_output_results>22
 
